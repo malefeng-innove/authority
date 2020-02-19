@@ -41,6 +41,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/dashboard/**", "anon");
         //其他
         filterChainDefinitionMap.put("/login","anon");
+        filterChainDefinitionMap.put("/wechatLogin/**","anon");
         filterChainDefinitionMap.put("/getVerCode","anon");
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setLoginUrl("/toLogin");

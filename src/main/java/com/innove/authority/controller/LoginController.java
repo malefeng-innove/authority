@@ -17,10 +17,7 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.imageio.ImageIO;
@@ -75,6 +72,20 @@ public class LoginController {
         } catch (IncorrectCredentialsException e){
             return response.error(RuntimeErrorEnum.INVALID_PSW_ERROR);
         }
+        return response.success(200,"登陆成功");
+    }
+
+    @GetMapping("/wechatLogin/{userName}")
+    public Response wechatLogin(@PathVariable("userName") String userName){
+        Response response = new Response();
+        UserDetailResponse userEntity = service.detail(userName);
+        if(userEntity==null){
+            return response.error(RuntimeErrorEnum.INVALID_USER_NAME_ERROR);
+        }
+        com.innove.authority.config.UsernamePasswordToken token = new com.innove.authority.config.UsernamePasswordToken(userName);
+        Subject subject = SecurityUtils.getSubject();
+        subject.login(token);
+        response.setData(userEntity);
         return response.success(200,"登陆成功");
     }
 
